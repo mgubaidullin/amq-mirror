@@ -1,0 +1,3 @@
+resources:
+- amq-mtl-broker.yaml
+- amq-lvl-broker.yaml

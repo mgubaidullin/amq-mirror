@@ -1,0 +1,89 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: amq-fed-quarkus
+    application: amq-fed-quarkus
+  name: amq-fed-quarkus
+  namespace: amq-mtl
+spec:
+  port:
+    targetPort: 8080-tcp
+  to:
+    kind: Service
+    name: amq-fed-quarkus
+    weight: 100
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: amq-fed-quarkus
+    application: amq-fed-quarkus
+  name: amq-fed-quarkus
+  namespace: amq-mtl
+spec:
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: amq-fed-quarkus
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    app: amq-fed-quarkus
+    application: amq-fed-quarkus
+    app.kubernetes.io/name: amq-fed-quarkus
+    app.openshift.io/runtime: quarkus
+  name: amq-fed-quarkus
+  namespace: amq-mtl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: amq-fed-quarkus
+  template:
+    metadata:
+      labels:
+        app: amq-fed-quarkus
+    spec:
+      containers:
+      - name: amq-fed-quarkus
+        imagePullPolicy: Always
+        image: quay.io/kepaso/amq-fed-quarkus:latest
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 45
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        - containerPort: 8778
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 45
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
