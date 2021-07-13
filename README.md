@@ -26,6 +26,7 @@ Demo of AMQ mirror option to capture events from the broker and pass them over t
 ### Prerequisites
 OpenShift 4.7 up and running
 
+
 ### Deployment
 Login to OpenShift
 ```bash
@@ -40,3 +41,12 @@ Create brokers `amq-mtl` and `amq-lvl` with `demo1` queue address in correspondi
 ```
 oc apply -k brokers
 ```
+
+### Build custom init container (optional)
+If required build your own AMQ Init Container image:
+```bash
+cd amq-init-container
+docker build -t quay.io/REPOSITORY/PROJECT:TAG --progress=plain .
+docker push quay.io/REPOSITORY/PROJECT:TAG
+```
+Change `amq-lvl-broker.yaml`, set `initImage` to your `quay.io/REPOSITORY/PROJECT:TAG`
