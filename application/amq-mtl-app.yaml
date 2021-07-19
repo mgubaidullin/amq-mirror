@@ -60,16 +60,6 @@ spec:
       - name: amq-fed-quarkus
         imagePullPolicy: Always
         image: quay.io/kepaso/amq-fed-quarkus:latest
-        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 45
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 1
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -77,13 +67,4 @@ spec:
           protocol: TCP
         - containerPort: 8778
           protocol: TCP
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 45
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 5
+          

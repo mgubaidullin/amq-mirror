@@ -49,4 +49,13 @@ cd amq-init-container
 docker build -t quay.io/REPOSITORY/PROJECT:TAG --progress=plain .
 docker push quay.io/REPOSITORY/PROJECT:TAG
 ```
-Change `amq-lvl-broker.yaml`, set `initImage` to your `quay.io/REPOSITORY/PROJECT:TAG`
+Change `broker/amq-lvl-broker.yaml` , set `initImage` to your `quay.io/REPOSITORY/PROJECT:TAG`
+
+### Build consumer app
+```bash
+cd amq-fed-quarkus
+mvn package
+docker build -f src/main/docker/Dockerfile.jvm -t quay.io/REPOSITORY/APP:tag .
+docker docker push quay.io/REPOSITORY/APP:tag
+```
+Change `application/amq-lvl-app.yaml` and `application/amq-mtl-app.yaml` , set `image` to your `quay.io/REPOSITORY/APP:TAG`
