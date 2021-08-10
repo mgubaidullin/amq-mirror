@@ -1,31 +1,23 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: amq-mtl
-spec:
-  finalizers:
-  - kubernetes
-
 ---
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
   name: amq-broker-rhel8
-  namespace: amq-mtl
+  namespace: amq-ha
 spec:
   targetNamespaces:
-  - amq-mtl
+  - amq-ha
 
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
   selfLink: >-
-    /apis/operators.coreos.com/v1alpha1/namespaces/amq-mtl/subscriptions/amq-broker-rhel8
+    /apis/operators.coreos.com/v1alpha1/namespaces/amq-ha/subscriptions/amq-broker-rhel8
   name: amq-broker-rhel8
-  namespace: amq-mtl
+  namespace: amq-ha
   labels:
-    operators.coreos.com/amq-broker-rhel8.amq-mtl: ''
+    operators.coreos.com/amq-broker-rhel8.amq-ha: ''
 spec:
   channel: 7.x
   installPlanApproval: Automatic
