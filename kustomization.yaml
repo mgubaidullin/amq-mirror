@@ -1,4 +1,0 @@
-resources:
-- namespace.yaml
-- amq-operator.yaml
-- amq-broker.yaml
