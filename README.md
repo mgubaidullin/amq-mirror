@@ -41,10 +41,21 @@ Create brokers `amq-mtl` and `amq-lvl` with `demo1` queue address in correspondi
 ```
 oc apply -k brokers
 ```
+### Demo
+1. Open AMQ Broker console MTL and LVL
+2. Check messages is queue demo1
+3. Add message to AMQ LVL
+4. Check that messages is in both brokers
+5. Deploy consumer application
+```shell
+oc apply -k application
+```
+6. Check that message is received by consumer
+7. Check that message dessapeared from MTL broker (because of message-acknowledgements mirroring) 
 
 ### Build custom init container (optional)
 If required build your own AMQ Init Container image:
-```bash
+```shell
 cd amq-init-container
 docker build -t quay.io/REPOSITORY/PROJECT:TAG --progress=plain .
 docker push quay.io/REPOSITORY/PROJECT:TAG
