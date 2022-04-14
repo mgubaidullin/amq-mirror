@@ -1,4 +1,4 @@
-# AMQ Mirror with Broker connections in OpenShift
+# AMQ Mirror with Broker connections on OpenShift
 
 Demo of AMQ mirror option to capture events from the broker and pass them over the wire to another broker. This enables you to capture multiple asynchronous replicas. More info: [ActiveMQ Broker Connections](https://activemq.apache.org/components/artemis/documentation/latest/amqp-broker-connections.html#mirror)
 
