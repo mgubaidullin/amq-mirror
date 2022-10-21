@@ -1,4 +1,4 @@
-apiVersion: broker.amq.io/v2alpha4
+apiVersion: broker.amq.io/v1beta1
 kind: ActiveMQArtemis
 metadata:
   namespace: amq-lvl
@@ -14,12 +14,6 @@ spec:
       connectionsAllowed: 10
       protocols: all
       anycastPrefix: jms.queue.
-  connectors:
-    - port: 61616
-      expose: true
-      host: amq-mtl-hdls-svc.amq-mtl.svc.cluster.local
-      name: amq-mtl-connector
-      type: tcp
   adminPassword: admin
   deploymentPlan:
     size: 1
@@ -30,13 +24,24 @@ spec:
     journalType: nio
     jolokiaAgentEnabled: false
     image: placeholder
-    initImage: quay.io/kepaso/amq-lvl:0.0.13
+    clustered: true
+  brokerProperties:
+   - "AMQPConnections.target.uri=tcp://amq-mtl-all-0-svc.amq-mtl.svc.cluster.local:61616?clientFailureCheckPeriod=2000&connectionTTL=5000"
+   - "AMQPConnections.target.retryInterval=5000"
+   - "AMQPConnections.target.reconnect-attempts=-1"
+   - "AMQPConnections.target.user=admin"
+   - "AMQPConnections.target.password=admin"
+   - "AMQPConnections.target.autoStart=true"
+   - "AMQPConnections.target.connectionElements.mirror.type=MIRROR"
+   - "AMQPConnections.target.connectionElements.mirror.messageAcknowledgements=true"
+   - "AMQPConnections.target.connectionElements.mirror.queueCreation=true"
+   - "AMQPConnections.target.connectionElements.mirror.queueRemoval=true"
   console:
     expose: true
   adminUser: admin
 
 ---
-apiVersion: broker.amq.io/v2alpha2
+apiVersion: broker.amq.io/v1beta1
 kind: ActiveMQArtemisAddress
 metadata:
   name: demo1

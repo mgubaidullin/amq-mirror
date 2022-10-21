@@ -1,4 +1,4 @@
-apiVersion: broker.amq.io/v2alpha4
+apiVersion: broker.amq.io/v1beta1
 kind: ActiveMQArtemis
 metadata:
   name: amq-mtl
@@ -24,12 +24,24 @@ spec:
     journalType: nio
     jolokiaAgentEnabled: false
     image: placeholder
+    clustered: true
+  brokerProperties:
+   - "AMQPConnections.target.uri=tcp://amq-lvl-all-0-svc.amq-lvl.svc.cluster.local:61616?clientFailureCheckPeriod=2000&connectionTTL=5000"
+   - "AMQPConnections.target.retryInterval=5000"
+   - "AMQPConnections.target.reconnect-attempts=-1"
+   - "AMQPConnections.target.user=admin"
+   - "AMQPConnections.target.password=admin"
+   - "AMQPConnections.target.autoStart=true"
+   - "AMQPConnections.target.connectionElements.mirror.type=MIRROR"
+   - "AMQPConnections.target.connectionElements.mirror.messageAcknowledgements=true"
+   - "AMQPConnections.target.connectionElements.mirror.queueCreation=true"
+   - "AMQPConnections.target.connectionElements.mirror.queueRemoval=true"
   console:
     expose: true
   adminUser: admin
 
 ---
-apiVersion: broker.amq.io/v2alpha2
+apiVersion: broker.amq.io/v1beta1
 kind: ActiveMQArtemisAddress
 metadata:
   name: demo1
