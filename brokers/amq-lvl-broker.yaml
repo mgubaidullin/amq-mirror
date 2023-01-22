@@ -3,20 +3,20 @@ kind: ActiveMQArtemis
 metadata:
   namespace: amq-lvl
   name: amq-lvl
-  application: aqm-lvl
 spec:
   acceptors:
     - port: 61616
       verifyHost: false
       expose: true
-      multicastPrefix: jms.topic.
       name: all
       connectionsAllowed: 10
+      enabledProtocols: all
       protocols: all
       anycastPrefix: jms.queue.
+      multicastPrefix: jms.topic.
   adminPassword: admin
   deploymentPlan:
-    size: 1
+    size: 3
     persistenceEnabled: true
     requireLogin: false
     messageMigration: true
@@ -26,7 +26,7 @@ spec:
     image: placeholder
     clustered: true
   brokerProperties:
-   - "AMQPConnections.target.uri=tcp://amq-mtl-all-0-svc.amq-mtl.svc.cluster.local:61616?clientFailureCheckPeriod=2000&connectionTTL=5000"
+   - "AMQPConnections.target.uri=tcp://amq-mtl-all-${STATEFUL_SET_ORDINAL}-svc.amq-mtl.svc.cluster.local:61616?clientFailureCheckPeriod=2000&connectionTTL=5000"
    - "AMQPConnections.target.retryInterval=5000"
    - "AMQPConnections.target.reconnect-attempts=-1"
    - "AMQPConnections.target.user=admin"

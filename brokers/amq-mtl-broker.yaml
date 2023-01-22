@@ -2,31 +2,31 @@ apiVersion: broker.amq.io/v1beta1
 kind: ActiveMQArtemis
 metadata:
   name: amq-mtl
-  application: amq-mtl
   namespace: amq-mtl
 spec:
   acceptors:
     - port: 61616
+      verifyHost: false
       expose: true
-      multicastPrefix: jms.topic.
       name: all
       connectionsAllowed: 10
       enabledProtocols: all
       protocols: all
       anycastPrefix: jms.queue.
+      multicastPrefix: jms.topic.
   adminPassword: admin
   deploymentPlan:
-    size: 1
+    size: 3
     persistenceEnabled: true
     requireLogin: false
-    messageMigration: false
+    messageMigration: true
     managementRBACEnabled: true
     journalType: nio
     jolokiaAgentEnabled: false
     image: placeholder
     clustered: true
   brokerProperties:
-   - "AMQPConnections.target.uri=tcp://amq-lvl-all-0-svc.amq-lvl.svc.cluster.local:61616?clientFailureCheckPeriod=2000&connectionTTL=5000"
+   - "AMQPConnections.target.uri=tcp://amq-lvl-all-${STATEFUL_SET_ORDINAL}-svc.amq-lvl.svc.cluster.local:61616?clientFailureCheckPeriod=2000&connectionTTL=5000"
    - "AMQPConnections.target.retryInterval=5000"
    - "AMQPConnections.target.reconnect-attempts=-1"
    - "AMQPConnections.target.user=admin"
