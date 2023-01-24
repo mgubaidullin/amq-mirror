@@ -36,6 +36,8 @@ spec:
    - "AMQPConnections.target.connectionElements.mirror.messageAcknowledgements=true"
    - "AMQPConnections.target.connectionElements.mirror.queueCreation=true"
    - "AMQPConnections.target.connectionElements.mirror.queueRemoval=true"
+   - "clusterConfiguration.amq-lvl.name=amq-lvl"
+   - "clusterConfigurations.amq-lvl.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION"
   console:
     expose: true
   adminUser: admin
