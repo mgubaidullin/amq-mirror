@@ -38,12 +38,18 @@ oc login https://host:port
 ```
 oc apply -k operators
 ```
-3. Create namespaces `amq-mtl` and `amq-lvl`, create brokers `amq-mtl` and `amq-lvl` with `demo1` queue address in corresponding namespaces 
+3. Create namespaces `amq-mtl` and `amq-lvl`, create brokers `amq-mtl` and `amq-lvl` with `demo1` topic address in corresponding namespaces 
 ```
 oc apply -k brokers
 ```
-### Test
-
-1. Open AMQ Broker Management console in `amq-lvl` and add message to `demo1` queue
-2. Open AMQ Broker Management console in `amq-mtl` and check message in `demo1` queue
-3. Make the same for `amq-mtl` to `amq-lvl`
+### Deploy applications
+1. Sender
+```
+cd client-amqp
+mvn clean package -Dnamespace=amq-mtl -Dname=amqp-sender
+```
+2. Receiver
+```
+cd client-amqp
+mvn clean package -Dnamespace=amq-mtl -Dname=amqp-receiver
+```

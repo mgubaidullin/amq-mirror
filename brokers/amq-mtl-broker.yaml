@@ -37,7 +37,6 @@ spec:
    - "AMQPConnections.target.connectionElements.mirror.queueCreation=true"
    - "AMQPConnections.target.connectionElements.mirror.queueRemoval=true"
    - "clusterConfiguration.amq-mtl.name=amq-mtl"
-   - "clusterConfigurations.amq-mtl.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION"
   console:
     expose: true
   adminUser: admin
@@ -50,9 +49,7 @@ metadata:
   namespace: amq-mtl
 spec:
   addressName: demo1
-  queueName: demo1
-  routingType: anycast
-
+  routingType: multicast
 ---
 kind: Route
 apiVersion: route.openshift.io/v1
