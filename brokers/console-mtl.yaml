@@ -40,27 +40,6 @@ spec:
     application: amq-mtl-app
     statefulset.kubernetes.io/pod-name: amq-mtl-ss-1
 ---
-kind: Service
-apiVersion: v1
-metadata:
-  name: amq-mtl-console-2-svc
-  namespace: amq-mtl
-  labels:
-    ActiveMQArtemis: amq-mtl
-    application: amq-mtl-app
-spec:
-  ports:
-    - name: console-jolokia
-      protocol: TCP
-      port: 8161
-      targetPort: 8161
-  type: ClusterIP
-  sessionAffinity: None
-  selector:
-    ActiveMQArtemis: amq-mtl
-    application: amq-mtl-app
-    statefulset.kubernetes.io/pod-name: amq-mtl-ss-2
----
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
@@ -84,20 +63,6 @@ spec:
   to:
     kind: Service
     name: amq-mtl-console-1-svc
-    weight: 100
-  port:
-    targetPort: console-jolokia
-  wildcardPolicy: None
----
-kind: Route
-apiVersion: route.openshift.io/v1
-metadata:
-  name: console-amq-mtl-2
-  namespace: amq-mtl
-spec:
-  to:
-    kind: Service
-    name: amq-mtl-console-2-svc
     weight: 100
   port:
     targetPort: console-jolokia

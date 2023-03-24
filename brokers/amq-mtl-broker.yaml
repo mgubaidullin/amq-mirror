@@ -16,7 +16,7 @@ spec:
       multicastPrefix: jms.topic.
   adminPassword: admin
   deploymentPlan:
-    size: 3
+    size: 2
     persistenceEnabled: true
     requireLogin: false
     messageMigration: true
