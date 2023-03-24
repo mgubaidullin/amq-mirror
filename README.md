@@ -33,12 +33,11 @@ OpenShift 4.10 up and running
 ```bash
 oc login https://host:port
 ```
-
-2. Install operators
+2. Create namespaces `amq-mtl` and `amq-lvl`. Install operators
 ```
 oc apply -k operators
 ```
-3. Create namespaces `amq-mtl` and `amq-lvl`, create brokers `amq-mtl` and `amq-lvl` with `demo1` topic address in corresponding namespaces 
+3. Create brokers `amq-mtl` and `amq-lvl` with `demo1` topic address in corresponding namespaces 
 ```
 oc apply -k brokers
 ```

@@ -9,4 +9,4 @@ spec:
   name: amq-broker-rhel8
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  startingCSV: amq-broker-operator.v7.10.2-opr-2-0.1676475747.p
+  startingCSV: amq-broker-operator.v7.10.2-opr-2-0.1676475747.p   
