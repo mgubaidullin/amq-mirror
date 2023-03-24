@@ -1,0 +1,70 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: amq-lvl-console-0-svc
+  namespace: amq-lvl
+  labels:
+    ActiveMQArtemis: amq-lvl
+    application: amq-lvl-app
+spec:
+  ports:
+    - name: console-jolokia
+      protocol: TCP
+      port: 8161
+      targetPort: 8161
+  type: ClusterIP
+  sessionAffinity: None
+  selector:
+    ActiveMQArtemis: amq-lvl
+    application: amq-lvl-app
+    statefulset.kubernetes.io/pod-name: amq-lvl-ss-0
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: amq-lvl-console-1-svc
+  namespace: amq-lvl
+  labels:
+    ActiveMQArtemis: amq-lvl
+    application: amq-lvl-app
+spec:
+  ports:
+    - name: console-jolokia
+      protocol: TCP
+      port: 8161
+      targetPort: 8161
+  type: ClusterIP
+  sessionAffinity: None
+  selector:
+    ActiveMQArtemis: amq-lvl
+    application: amq-lvl-app
+    statefulset.kubernetes.io/pod-name: amq-lvl-ss-1
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: console-amq-lvl-0
+  namespace: amq-lvl
+spec:
+  to:
+    kind: Service
+    name: amq-lvl-console-0-svc
+    weight: 100
+  port:
+    targetPort: console-jolokia
+  wildcardPolicy: None
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: console-amq-lvl-1
+  namespace: amq-lvl
+spec:
+  to:
+    kind: Service
+    name: amq-lvl-console-1-svc
+    weight: 100
+  port:
+    targetPort: console-jolokia
+  wildcardPolicy: None
+

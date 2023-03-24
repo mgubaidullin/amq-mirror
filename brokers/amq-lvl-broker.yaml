@@ -1,28 +1,22 @@
-apiVersion: broker.amq.io/v2alpha4
+apiVersion: broker.amq.io/v1beta1
 kind: ActiveMQArtemis
 metadata:
   namespace: amq-lvl
   name: amq-lvl
-  application: aqm-lvl
 spec:
   acceptors:
     - port: 61616
       verifyHost: false
       expose: true
-      multicastPrefix: jms.topic.
       name: all
       connectionsAllowed: 10
+      enabledProtocols: all
       protocols: all
       anycastPrefix: jms.queue.
-  connectors:
-    - port: 61616
-      expose: true
-      host: amq-mtl-hdls-svc.amq-mtl.svc.cluster.local
-      name: amq-mtl-connector
-      type: tcp
+      multicastPrefix: jms.topic.
   adminPassword: admin
   deploymentPlan:
-    size: 1
+    size: 2
     persistenceEnabled: true
     requireLogin: false
     messageMigration: true
@@ -30,22 +24,32 @@ spec:
     journalType: nio
     jolokiaAgentEnabled: false
     image: placeholder
-    initImage: quay.io/kepaso/amq-lvl:0.0.13
+    clustered: true
+  brokerProperties:
+   - "AMQPConnections.target.uri=tcp://amq-mtl-all-${STATEFUL_SET_ORDINAL}-svc.amq-mtl.svc.cluster.local:61616?clientFailureCheckPeriod=2000&connectionTTL=5000"
+   - "AMQPConnections.target.retryInterval=5000"
+   - "AMQPConnections.target.reconnect-attempts=-1"
+   - "AMQPConnections.target.user=admin"
+   - "AMQPConnections.target.password=admin"
+   - "AMQPConnections.target.autoStart=true"
+   - "AMQPConnections.target.connectionElements.mirror.type=MIRROR"
+   - "AMQPConnections.target.connectionElements.mirror.messageAcknowledgements=true"
+   - "AMQPConnections.target.connectionElements.mirror.queueCreation=true"
+   - "AMQPConnections.target.connectionElements.mirror.queueRemoval=true"
+   - "clusterConfiguration.amq-lvl.name=amq-lvl"
   console:
     expose: true
   adminUser: admin
 
 ---
-apiVersion: broker.amq.io/v2alpha2
+apiVersion: broker.amq.io/v1beta1
 kind: ActiveMQArtemisAddress
 metadata:
   name: demo1
   namespace: amq-lvl
 spec:
   addressName: demo1
-  queueName: demo1
-  routingType: anycast
-
+  routingType: multicast
 ---
 kind: Route
 apiVersion: route.openshift.io/v1

@@ -1,3 +1,4 @@
 resources:
-- amq-mtl-operator.yaml
-- amq-lvl-operator.yaml
+- namespaces.yaml
+- amq-operator.yaml
+- qdr-operator.yaml

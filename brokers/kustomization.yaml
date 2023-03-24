@@ -1,3 +1,5 @@
 resources:
 - amq-mtl-broker.yaml
 - amq-lvl-broker.yaml
+- console-mtl.yaml
+- console-lvl.yaml
