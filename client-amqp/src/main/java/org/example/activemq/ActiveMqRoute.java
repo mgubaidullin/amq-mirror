@@ -32,9 +32,10 @@ public class ActiveMqRoute extends EndpointRouteBuilder {
                 .to(amqp("topic:demo1").connectionFactory(new JmsConnectionFactory(connection)))
                 .log("${headers} : ${body}");
 
-            from(amqp("topic:demo1").connectionFactory(new JmsConnectionFactory(connection)))
-                .routeId("receiver").autoStartup(name.contains("receiver"))
-                    .aggregate(new StringAggregationStrategy()).body().completionSize(1000)
+            from(amqp("topic:demo1")
+                    .durableSubscriptionName("subscription1").subscriptionDurable(true)
+                    .clientId("amqp-receiver").connectionFactory(new JmsConnectionFactory(connection)))
+                    .routeId("receiver").autoStartup(name.contains("receiver"))
                     .log("${header.start} : ${body}");
     }
 

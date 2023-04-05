@@ -1,4 +1,5 @@
 resources:
+- namespaces.yaml
 - amq-mtl-broker.yaml
 - amq-lvl-broker.yaml
 - console-mtl.yaml

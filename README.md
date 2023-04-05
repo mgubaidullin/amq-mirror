@@ -8,7 +8,6 @@
 4. Topic `demo1` in each broker
 5. Dual mirror (Disaster recovery) configuration of brokers [ActiveMQ Broker Connections](https://activemq.apache.org/components/artemis/documentation/latest/amqp-broker-connections.html#mirror)
 
-![architecture.png](architecture.png)
 
 ## How to
 ### Prerequisites
@@ -19,22 +18,23 @@ OpenShift 4.10 up and running
 ```bash
 oc login https://host:port
 ```
-2. Create namespaces `amq-mtl` and `amq-lvl`. Install operators
+2. Install operators
 ```
 oc apply -k operators
 ```
-3. Create brokers `amq-mtl` and `amq-lvl` with `demo1` topic address in corresponding namespaces 
+3. Create namespaces `amq-mtl` and `amq-lvl`. Create brokers `amq-mtl` and `amq-lvl` with `demo1` topic address in corresponding namespaces 
 ```
 oc apply -k brokers
 ```
 ### Deploy applications
-1. Sender
 ```
 cd client-amqp
+```
+1. Sender
+```
 mvn clean package -Dnamespace=amq-mtl -Dname=amqp-sender
 ```
 2. Receiver
 ```
-cd client-amqp
 mvn clean package -Dnamespace=amq-mtl -Dname=amqp-receiver
 ```

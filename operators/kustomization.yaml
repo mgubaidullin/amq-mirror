@@ -1,4 +1,2 @@
 resources:
-- namespaces.yaml
 - amq-operator.yaml
-- qdr-operator.yaml
