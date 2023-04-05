@@ -4,7 +4,6 @@
 
 1. Two namespaces in Openshift
 2. Two brokers AMQ cluster in each namespace
-3. Two Interconnect routers in each namespace
 4. Topic `demo1` in each broker
 5. Dual mirror (Disaster recovery) configuration of brokers [ActiveMQ Broker Connections](https://activemq.apache.org/components/artemis/documentation/latest/amqp-broker-connections.html#mirror)
 
