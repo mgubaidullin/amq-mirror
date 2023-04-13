@@ -31,9 +31,9 @@ cd client-amqp
 ```
 1. Sender
 ```
-mvn clean package -Dnamespace=amq-mtl -Dname=amqp-sender
+mvn clean package -Dnamespace=amq-mtl -Dname=producer
 ```
 2. Receiver
 ```
-mvn clean package -Dnamespace=amq-mtl -Dname=amqp-receiver
+mvn clean package -Dnamespace=amq-mtl -Dname=consumer
 ```
