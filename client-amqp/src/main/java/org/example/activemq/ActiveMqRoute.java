@@ -30,7 +30,7 @@ public class ActiveMqRoute extends EndpointRouteBuilder {
                 .process(e -> e.getIn().setBody("V_" + atomicInteger.incrementAndGet()))
                 .setHeader("start", constant(System.currentTimeMillis()))
                 .to(amqp("topic:demo1"))
-                .log("${headers} : ${body}");
+                .log("${header.start} : ${body}");
 
             from(amqp("topic:demo1").subscriptionDurable(true).subscriptionName(name).clientId(name))
                     .routeId("consumer").autoStartup(name.contains("consumer"))
