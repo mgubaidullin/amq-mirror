@@ -1,8 +1,7 @@
 package org.example.activemq;
 
+import org.apache.camel.builder.component.ComponentsBuilderFactory;
 import org.apache.camel.builder.endpoint.EndpointRouteBuilder;
-import org.apache.camel.component.amqp.AMQPConnectionDetails;
-import org.apache.camel.processor.aggregate.StringAggregationStrategy;
 import org.apache.qpid.jms.JmsConnectionFactory;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -25,17 +24,16 @@ public class ActiveMqRoute extends EndpointRouteBuilder {
 
         System.out.println("Application: " + name);
 
-        from(timer("demo").period(1000).repeatCount(3)).routeId("sender")
-                .process(e -> e.getIn().setBody("V_" + atomicInteger.incrementAndGet())).autoStartup(name.contains("sender"))
-                .log("${body}")
+        ComponentsBuilderFactory.amqp().connectionFactory(new JmsConnectionFactory(connection)).register(getContext(), "amqp");
+
+        from(timer("demo").period(1000).repeatCount(3)).routeId("producer").autoStartup(name.contains("producer"))
+                .process(e -> e.getIn().setBody("V_" + atomicInteger.incrementAndGet()))
                 .setHeader("start", constant(System.currentTimeMillis()))
-                .to(amqp("topic:demo1").connectionFactory(new JmsConnectionFactory(connection)))
+                .to(amqp("topic:demo1"))
                 .log("${headers} : ${body}");
 
-            from(amqp("topic:demo1")
-                    .durableSubscriptionName("subscription1").subscriptionDurable(true)
-                    .clientId("amqp-receiver").connectionFactory(new JmsConnectionFactory(connection)))
-                    .routeId("receiver").autoStartup(name.contains("receiver"))
+            from(amqp("topic:demo1").subscriptionDurable(true).subscriptionName(name).clientId(name))
+                    .routeId("consumer").autoStartup(name.contains("consumer"))
                     .log("${header.start} : ${body}");
     }
 
