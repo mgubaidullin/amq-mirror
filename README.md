@@ -10,12 +10,12 @@
 
 ## How to
 ### Prerequisites
-OpenShift 4.10 up and running
+OpenShift 4.12 up and running
 
 ### Deployment
 1. Login to OpenShift
 ```bash
-oc login https://host:port
+oc login --token=XXX --server=https://XXX:6443
 ```
 2. Install operators
 ```
@@ -28,12 +28,40 @@ oc apply -k brokers
 ### Deploy applications
 ```
 cd client-amqp
+oc project amq-mtl
 ```
-1. Sender
+1. Consumer
+Build and deploy consumer
 ```
-mvn clean package -Dnamespace=amq-mtl -Dname=producer
+mvn clean package -Dnamespace=amq-mtl -Dname=consumer -Dquarkus.openshift.env.vars.connection=amqp://amq-mtl-all-1-svc:61616
 ```
-2. Receiver
+2. Producer
+Build and deploy producer
 ```
-mvn clean package -Dnamespace=amq-mtl -Dname=consumer
+mvn clean package -Dnamespace=amq-mtl -Dname=producer -Dquarkus.openshift.env.vars.connection=amqp://amq-mtl-all-0-svc:61616
+```
+### Verify results
+Message sent
+```
+oc get pods --selector application=producer -o name | xargs oc logs
+```
+Result:
+```
+2023-04-13 18:40:13,181 INFO  [producer] (Camel (camel-1) thread #1 - timer://demo) 1681411211518 : V_1
+2023-04-13 18:40:13,804 INFO  [producer] (Camel (camel-1) thread #1 - timer://demo) 1681411211518 : V_2
+2023-04-13 18:40:14,800 INFO  [producer] (Camel (camel-1) thread #1 - timer://demo) 1681411211518 : V_3
+```
+
+Message received
+```
+oc get pods --selector application=consumer -o name | xargs oc logs
+```
+result
+```
+2023-04-13 18:40:13,162 INFO  [consumer] (Camel (camel-1) thread #1 - JmsConsumer[demo1]) 1681411211518 : V_1
+2023-04-13 18:40:13,172 INFO  [consumer] (Camel (camel-1) thread #1 - JmsConsumer[demo1]) 1681411211518 : V_1
+2023-04-13 18:40:13,802 INFO  [consumer] (Camel (camel-1) thread #1 - JmsConsumer[demo1]) 1681411211518 : V_2
+2023-04-13 18:40:13,817 INFO  [consumer] (Camel (camel-1) thread #1 - JmsConsumer[demo1]) 1681411211518 : V_2
+2023-04-13 18:40:14,798 INFO  [consumer] (Camel (camel-1) thread #1 - JmsConsumer[demo1]) 1681411211518 : V_3
+2023-04-13 18:40:14,808 INFO  [consumer] (Camel (camel-1) thread #1 - JmsConsumer[demo1]) 1681411211518 : V_3
 ```
