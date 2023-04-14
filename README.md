@@ -33,7 +33,7 @@ oc project amq-mtl
 1. Consumer
 Build and deploy consumer
 ```
-mvn clean package -Dnamespace=amq-mtl -Dname=consumer -Dquarkus.openshift.env.vars.connection=amqp://amq-mtl-all-1-svc:61616
+mvn clean package -Dnamespace=amq-mtl -Dname=consumer -Dquarkus.openshift.env.vars.connection=amqp://amq-mtl-all-0-svc:61616
 ```
 2. Producer
 Build and deploy producer
